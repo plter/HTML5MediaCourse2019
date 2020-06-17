@@ -22,7 +22,6 @@ function configSocketIO(server) {
         });
 
         socket.on("disconnect", () => {
-            broadcastClientList();
         });
 
         socket.on("offer", data => {
