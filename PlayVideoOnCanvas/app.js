@@ -1,5 +1,9 @@
 new Vue({
     el: "#vueapp",
+    data: {
+        fps: 0,
+        ts: 0
+    },
     mounted() {
         /**
          * @type {CanvasRenderingContext2D}
@@ -30,7 +34,9 @@ new Vue({
             this._video.pause();
         },
 
-        animationFrameHandler() {
+        animationFrameHandler(ts) {
+            this.fps = 1000 / (ts - this.ts);
+            this.ts = ts;
             this._previewContext2d.drawImage(this._video, 0, 0, this._previewCanvasWidth, this._previewCanvasHeight);
             let srcImageData = this._previewContext2d.getImageData(0, 0, this._previewCanvasWidth, this._previewCanvasHeight);
             let destImageData = this._resultContext2d.createImageData(srcImageData.width, srcImageData.height);
