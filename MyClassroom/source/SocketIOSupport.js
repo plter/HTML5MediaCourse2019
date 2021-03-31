@@ -5,12 +5,10 @@ let roomTeacherMap = new Map();
 function configSocketIO(server) {
     let io = SocketIOServer(server);
 
-    function listClients(roomName) {
-        io.to(roomName).clients((err, clients) => {
-            if (!err) {
-                io.to(roomName).emit("listClients", clients);
-            }
-        });
+    async function listClients(roomName) {
+        let room = io.to(roomName);
+        let clients = Array.from(await room.allSockets());
+        room.emit("listClients", clients);
     }
 
     io.on("connection", socket => {
@@ -38,7 +36,7 @@ function configSocketIO(server) {
             socket.join(name);
             callback();
             listClients(name);
-            io.to(roomTeacherMap.get(name)).emit("studentJoinedIn", {studentSid: socket.id});
+            io.to(roomTeacherMap.get(name)).emit("studentJoinedIn", { studentSid: socket.id });
         });
 
         socket.on("teacherOffer", data => {
