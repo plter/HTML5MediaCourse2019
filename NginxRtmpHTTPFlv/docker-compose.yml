@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  rtmpserver:
+    build: ./rtmpserver
+    command: /usr/local/nginx/sbin/nginx -g "daemon off;"
+    volumes:
+      - ./webroot:/opt/webroot
+    ports:
+      - 1935:1935
+      - 8080:8080
