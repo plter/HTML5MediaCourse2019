@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="socket.io.min.js"></script>
+</head>
+
+<body>
+    <video controls muted autoplay width="480" height="320"></video>
+
+    <script>
+        (async () => {
+            let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            document.querySelector("video").srcObject = stream;
+
+            let socket = io();
+
+            socket.emit("publishStream", { app: "myapp", stream: "s" }, function (result) {
+                if (result) {
+                    let mr = new MediaRecorder(stream);
+                    mr.ondataavailable = async function (e) {
+                        socket.emit("streamData", e.data);
+                    }
+                    mr.start(40);
+                }
+            });
+        })()
+    </script>
+</body>
+
+</html>
