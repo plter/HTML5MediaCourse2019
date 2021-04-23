@@ -7,7 +7,7 @@
 
 (async function () {
 
-    let p = child_process.spawn("ffmpeg", ["-fflags", "nobuffer", "-i", "-", "-vcodec", "libx264", "-f", "flv", "rtmp://127.0.0.1/myapp/s"]);
+    let p = child_process.spawn("ffmpeg", ["-fflags", "nobuffer", "-i", "-", "-vcodec", "copy", "-f", "flv", "rtmp://127.0.0.1/myapp/s"]);
     p.stderr.on("data", data => {
         console.log(data.toString());
     });
@@ -17,7 +17,7 @@
 
     let stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: true });
 
-    let mr = new MediaRecorder(stream);
+    let mr = new MediaRecorder(stream, { mimetype: "video/webm; codec=h264" });
     mr.ondataavailable = async function (e) {
         p.stdin.write(NodeBuffer.from(await e.data.arrayBuffer()));
     }

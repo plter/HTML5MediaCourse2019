@@ -5,7 +5,7 @@ function ConfigSocketIO(nodeServer) {
     let io = SocketIO(nodeServer);
     io.on("connection", socket => {
         socket.on("publishStream", (data, callback) => {
-            let p = socket.ffmpeg_process = child_process.spawn("ffmpeg", ["-fflags", "nobuffer", "-i", "-", "-vcodec", "libx264", "-f", "flv", `rtmp://127.0.0.1/${data.app}/${data.stream}`]);
+            let p = socket.ffmpeg_process = child_process.spawn("ffmpeg", ["-fflags", "nobuffer", "-i", "-", "-vcodec", "copy", "-f", "flv", `rtmp://127.0.0.1/${data.app}/${data.stream}`]);
             p.stderr.on("data", data => {
                 console.log(data.toString());
             });

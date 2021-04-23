@@ -21,7 +21,7 @@
 
             socket.emit("publishStream", { app: "myapp", stream: "s" }, function (result) {
                 if (result) {
-                    let mr = new MediaRecorder(stream);
+                    let mr = new MediaRecorder(stream, { mimetype: "video/webm; codec=h264" });
                     mr.ondataavailable = async function (e) {
                         socket.emit("streamData", e.data);
                     }
